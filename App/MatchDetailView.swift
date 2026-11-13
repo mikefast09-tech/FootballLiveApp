@@ -52,8 +52,8 @@ struct MatchDetailView: View {
                         }
                     } else if selectedTab == 1 {
                         if stats.count == 2 {
-                            ForEach(stats.statistics) { stat in
-                                let awayVal = stats.statistics.first(where: { $0.type == stat.type })?.value?.displayString ?? "-"
+                            ForEach(stats[0].statistics) { stat in
+                                let awayVal = stats[1].statistics.first(where: { $0.type == stat.type })?.value?.displayString ?? "-"
                                 HStack {
                                     Text(stat.value?.displayString ?? "-").bold().frame(width: 50, alignment: .leading); Spacer()
                                     Text(stat.type).font(.caption).foregroundStyle(.secondary); Spacer()
