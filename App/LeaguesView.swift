@@ -53,7 +53,7 @@ struct LeaguesView: View {
                                     Text(item.player.name).font(.subheadline.bold())
                                     Text("\(stat?.team.name ?? "")  Игр: \(stat?.games.appearences ?? 0)").font(.caption).foregroundStyle(.secondary)
                                 }; Spacer()
-                                Text("\(selectedSection == 1 ? (stat?.goals.total ?? 0) : (stat?.goals.assists ?? 0))").font(.headline.bold()).foregroundStyle(.accent)
+                                Text("\(selectedSection == 1 ? (stat?.goals.total ?? 0) : (stat?.goals.assists ?? 0))").font(.headline.bold()).foregroundStyle(.tint)
                             }
                         }
                     }.listStyle(.plain)
