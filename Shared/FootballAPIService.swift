@@ -3,8 +3,8 @@ import Foundation
 final class FootballAPIService {
     static let shared = FootballAPIService()
     private let baseURL = "https://api-sports.io"
-    private let apiKey = "1c98241a51e0d1179a22b91c7012dd20"
-    private let trackedLeagues =
+    private let apiKey = "SECRET_API_KEY_PLACEHOLDER"
+    private let trackedLeagues = [235, 39, 140, 135, 78, 2]
     
     func makeCachedRequest(endpoint: String, ttl: TimeInterval, forceRefresh: Bool = false) async throws -> Data {
         if !forceRefresh, let cached = APICacheManager.shared.load(forKey: endpoint) { return cached }
