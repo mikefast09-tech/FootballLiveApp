@@ -131,7 +131,7 @@ struct MatchPlayerDetailSheet: View {
                         }
                     }
                     NavigationLink(destination: PlayerProfileView(playerId: playerWrapper.player.id, playerName: playerWrapper.player.name)) {
-                        Label("Открыть полное досье и карьеру", systemImage: "person.text.rectangle").font(.subheadline.bold()).foregroundStyle(.accent)
+                        Label("Открыть полное досье и карьеру", systemImage: "person.text.rectangle").font(.subheadline.bold()).foregroundStyle(Color.accentColor)
                     }
                 }
                 Section("Показатели в матче") {
