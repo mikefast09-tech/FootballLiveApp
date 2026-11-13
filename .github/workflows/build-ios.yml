@@ -1,0 +1,49 @@
+name: Build iOS IPA
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Inject API Key from GitHub Secrets
+        env:
+          API_KEY: ${{ secrets.API_FOOTBALL_KEY }}
+        run: |
+          sed -i '' "s/SECRET_API_KEY_PLACEHOLDER/$API_KEY/g" Shared/FootballAPIService.swift
+
+      - name: Install XcodeGen and generate project
+        run: |
+          brew install xcodegen
+          xcodegen generate
+
+      - name: Build unsigned iOS app
+        run: |
+          xcodebuild clean build \
+            -project FootballLiveApp.xcodeproj \
+            -scheme FootballLiveApp \
+            -configuration Release \
+            -sdk iphoneos \
+            -derivedDataPath build \
+            CODE_SIGN_IDENTITY="" \
+            CODE_SIGNING_REQUIRED=NO \
+            CODE_SIGNING_ALLOWED=NO
+
+      - name: Package into IPA
+        run: |
+          mkdir -p Payload
+          cp -r build/Build/Products/Release-iphoneos/FootballLiveApp.app Payload/
+          zip -r FootballLiveApp.ipa Payload
+
+      - name: Upload IPA artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: FootballLiveApp-IPA
+          path: FootballLiveApp.ipa
