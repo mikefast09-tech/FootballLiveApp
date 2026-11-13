@@ -1,0 +1,33 @@
+workflows:
+  ios-build:
+    name: Build iOS IPA
+    max_build_duration: 30
+    instance_type: mac_mini_m2
+    environment:
+      groups:
+        - api_secrets
+      xcode: latest
+    scripts:
+      - name: Inject API Key
+        script: |
+          sed -i '' "s/SECRET_API_KEY_PLACEHOLDER/$API_FOOTBALL_KEY/g" Shared/FootballAPIService.swift
+      - name: Generate Xcode Project
+        script: |
+          brew install xcodegen
+          xcodegen generate
+      - name: Build Unsigned IPA
+        script: |
+          xcodebuild clean build \
+            -project FootballLiveApp.xcodeproj \
+            -scheme FootballLiveApp \
+            -configuration Release \
+            -sdk iphoneos \
+            -derivedDataPath build \
+            CODE_SIGN_IDENTITY="" \
+            CODE_SIGNING_REQUIRED=NO \
+            CODE_SIGNING_ALLOWED=NO
+          mkdir -p Payload
+          cp -r build/Build/Products/Release-iphoneos/FootballLiveApp.app Payload/
+          zip -r FootballLiveApp.ipa Payload
+    artifacts:
+      - FootballLiveApp.ipa
